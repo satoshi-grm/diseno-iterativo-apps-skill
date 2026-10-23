@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mapa de pantallas — Prototipo</title>
+<link rel="stylesheet" href="tokens.css">
+<link rel="stylesheet" href="app.css">
+<style>
+  main { margin: 0 auto; max-width: 1100px; }
+  .mapa { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: var(--s4); padding: 0; list-style: none; }
+  .mapa a { display: block; padding: var(--s4); background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); text-decoration: none; height: 100%; }
+  .mapa a:hover { border-color: var(--accent); }
+  .mapa b { display: block; margin-bottom: var(--s1); }
+  .mapa span { color: var(--muted); font-size: var(--text-sm); }
+  .flujos li { margin-bottom: var(--s2); }
+  .flujos a { color: var(--accent); }
+  section { margin-bottom: var(--s7); }
+</style>
+</head>
+<body>
+<main>
+  <div class="cabecera">
+    <div>
+      <h1>Prototipo: Turnos</h1>
+      <p class="sub">Prototipo clickeable de ejemplo. Datos inventados, sin backend. Ronda 1 · estado: iterando.</p>
+    </div>
+    <div>
+      <a class="btn primario" href="pantallas/inicio.html">Entrar al prototipo</a>
+      <button class="btn" data-reiniciar>Reiniciar demo</button>
+    </div>
+  </div>
+
+  <section>
+    <h2>Pantallas</h2>
+    <ul class="mapa">
+      <li><a href="pantallas/inicio.html"><b>P-01 · Inicio</b><span>Turnos de hoy y lo que necesita atención.</span></a></li>
+      <li><a href="pantallas/turnos.html"><b>P-02 · Turnos</b><span>Lista con filtros por estado y vista vacía.</span></a></li>
+      <li><a href="pantallas/turno.html?id=t2"><b>P-03 · Detalle de turno</b><span>Datos, confirmar, cancelar.</span></a></li>
+      <li><a href="pantallas/nuevo-turno.html"><b>P-04 · Nuevo turno</b><span>Formulario con validación simulada.</span></a></li>
+      <li><a href="pantallas/ajustes.html"><b>P-05 · Ajustes</b><span>Profesionales y recordatorios (integración simulada).</span></a></li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Flujos para recorrer</h2>
+    <ol class="flujos">
+      <li><b>FL-01 Cargar un turno:</b> <a href="pantallas/inicio.html">Inicio</a> → Nuevo turno → completar → Guardar → aparece en Turnos.</li>
+      <li><b>FL-02 Confirmar un pendiente:</b> <a href="pantallas/turnos.html">Turnos</a> → filtro «Pendiente» → abrir → Confirmar.</li>
+      <li><b>FL-03 Cancelar y deshacer:</b> <a href="pantallas/turno.html?id=t1">Detalle</a> → Cancelar turno → Deshacer.</li>
+      <li><b>FL-04 Lista vacía:</b> <a href="pantallas/turnos.html?vacio=1">Turnos sin datos</a>.</li>
+    </ol>
+  </section>
+</main>
+<script src="datos.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

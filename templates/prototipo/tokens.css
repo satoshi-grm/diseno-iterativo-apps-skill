@@ -1,0 +1,40 @@
+/* tokens.css — único lugar con colores, tipografía, espacios y radios.
+   Estilo por defecto: lienzo (papel claro, tinta, un solo acento).
+   Al cambiar de dirección visual se reemplaza SOLO este archivo. */
+:root {
+  /* Color */
+  --bg: #f6f3ee;          /* lienzo */
+  --surface: #fffdf9;     /* hoja */
+  --surface-2: #efeae2;   /* hover, filas alternas */
+  --ink: #1f1d1a;         /* texto principal */
+  --muted: #5f5a52;       /* texto secundario (contraste AA sobre --bg y --surface) */
+  --line: #ddd6cb;        /* divisores */
+  --line-strong: #8f877b; /* bordes de campos (≥ 3:1) */
+  --accent: #1f5f4a;      /* único acento */
+  --accent-ink: #ffffff;
+  --accent-soft: #e3eee9;
+  --ok: #2f6b3a;
+  --warn: #8a5a00;
+  --danger: #a23b2a;
+
+  /* Tipografía */
+  --font: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --text-xs: 12px;
+  --text-sm: 14px;
+  --text-md: 16px;
+  --text-lg: 20px;
+  --text-xl: 28px;
+  --weight-regular: 400;
+  --weight-medium: 550;
+  --weight-bold: 680;
+
+  /* Espacios (escala de 4) */
+  --s1: 4px; --s2: 8px; --s3: 12px; --s4: 16px; --s5: 24px; --s6: 32px; --s7: 48px;
+
+  /* Forma */
+  --radius: 10px;
+  --radius-sm: 6px;
+  --control-h: 40px;
+  --sidebar-w: 232px;
+  --focus: 0 0 0 3px #1f5f4a55;
+}

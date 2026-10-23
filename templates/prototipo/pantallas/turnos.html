@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Turnos — Turnos (prototipo)</title>
+<link rel="stylesheet" href="../tokens.css">
+<link rel="stylesheet" href="../app.css">
+</head>
+<body>
+<div class="shell">
+  <nav class="nav" aria-label="Principal">
+    <div class="marca">Turnos</div>
+    <a href="inicio.html">Inicio</a>
+    <a href="turnos.html" aria-current="page">Turnos</a>
+    <a href="nuevo-turno.html">Nuevo turno</a>
+    <a href="ajustes.html">Ajustes</a>
+    <div class="pie">Prototipo · <a href="../index.html">Mapa de pantallas</a></div>
+  </nav>
+  <main>
+    <div class="cabecera">
+      <div><h1>Turnos</h1><p class="sub" id="cuenta"></p></div>
+      <a class="btn primario" href="nuevo-turno.html">Nuevo turno</a>
+    </div>
+    <div class="filtros" role="group" aria-label="Filtrar por estado">
+      <button class="btn" data-f="todos">Todos</button>
+      <button class="btn" data-f="confirmado">Confirmado</button>
+      <button class="btn" data-f="pendiente">Pendiente</button>
+      <button class="btn" data-f="cancelado">Cancelado</button>
+    </div>
+    <section class="hoja">
+      <div class="tabla"><table><thead><tr><th>Fecha</th><th>Hora</th><th>Paciente</th><th>Profesional</th><th>Estado</th></tr></thead><tbody id="lista"></tbody></table></div>
+      <div id="vacio" class="vacio" hidden><strong>Todavía no hay turnos</strong>Cuando cargues el primero, aparece acá. <p><a class="btn primario" href="nuevo-turno.html">Cargar el primer turno</a></p></div>
+    </section>
+  </main>
+</div>
+<script src="../datos.js"></script>
+<script src="../app.js"></script>
+<script>
+  var vacio = Proto.param("vacio") === "1";
+  var filtro = Proto.param("estado") || "todos";
+  function pintar() {
+    var lista = vacio ? [] : Proto.datos.turnos.filter(function (t) { return filtro === "todos" || t.estado === filtro; });
+    document.querySelectorAll("[data-f]").forEach(function (b) { b.setAttribute("aria-pressed", b.dataset.f === filtro); });
+    document.getElementById("cuenta").textContent = lista.length + (lista.length === 1 ? " turno" : " turnos");
+    document.getElementById("vacio").hidden = lista.length > 0;
+    document.querySelector(".tabla").hidden = lista.length === 0;
+    document.getElementById("lista").innerHTML = lista.map(function (t) {
+      return '<tr class="fila-link" onclick="location.href=\'turno.html?id=' + t.id + '\'"><td>' + Proto.fecha(t.fecha) + "</td><td>" + t.hora + '</td><td><a href="turno.html?id=' + t.id + '">' + Proto.esc(t.paciente) + "</a></td><td>" + Proto.esc(t.profesional) + "</td><td>" + Proto.estado(t.estado) + "</td></tr>";
+    }).join("");
+  }
+  document.querySelectorAll("[data-f]").forEach(function (b) { b.addEventListener("click", function () { filtro = b.dataset.f; vacio = false; pintar(); }); });
+  pintar();
+</script>
+</body>
+</html>

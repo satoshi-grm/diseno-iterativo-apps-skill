@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Inicio — Turnos (prototipo)</title>
+<link rel="stylesheet" href="../tokens.css">
+<link rel="stylesheet" href="../app.css">
+</head>
+<body>
+<div class="shell">
+  <nav class="nav" aria-label="Principal">
+    <div class="marca">Turnos</div>
+    <a href="inicio.html" aria-current="page">Inicio</a>
+    <a href="turnos.html">Turnos</a>
+    <a href="nuevo-turno.html">Nuevo turno</a>
+    <a href="ajustes.html">Ajustes</a>
+    <div class="pie">Prototipo · <a href="../index.html">Mapa de pantallas</a></div>
+  </nav>
+  <main>
+    <div class="cabecera">
+      <div><h1>Hoy</h1><p class="sub" id="resumen"></p></div>
+      <a class="btn primario" href="nuevo-turno.html">Nuevo turno</a>
+    </div>
+    <div class="grilla">
+      <section class="hoja" aria-labelledby="t-hoy">
+        <h2 id="t-hoy">Turnos del día</h2>
+        <div class="tabla"><table><thead><tr><th>Hora</th><th>Paciente</th><th>Estado</th><th>Profesional</th></tr></thead><tbody id="hoy"></tbody></table></div>
+      </section>
+      <section class="hoja" aria-labelledby="t-atencion">
+        <h2 id="t-atencion">Necesitan atención</h2>
+        <div id="atencion"></div>
+        <p><a href="turnos.html?estado=pendiente">Ver todos los pendientes</a></p>
+      </section>
+    </div>
+  </main>
+</div>
+<script src="../datos.js"></script>
+<script src="../app.js"></script>
+<script>
+  var DIA = "2026-11-03"; // día simulado del prototipo
+  var hoy = Proto.datos.turnos.filter(function (t) { return t.fecha === DIA; }).sort(function (a, b) { return a.hora < b.hora ? -1 : 1; });
+  document.getElementById("resumen").textContent = Proto.fecha(DIA) + " · " + hoy.length + " turnos · " + Proto.datos.negocio;
+  document.getElementById("hoy").innerHTML = hoy.map(function (t) {
+    return '<tr class="fila-link" onclick="location.href=\'turno.html?id=' + t.id + '\'"><td>' + t.hora + '</td><td><a href="turno.html?id=' + t.id + '">' + Proto.esc(t.paciente) + '</a></td><td>' + Proto.estado(t.estado) + '</td><td>' + Proto.esc(t.profesional) + '</td></tr>';
+  }).join("") || '<tr><td colspan="4" class="vacio"><strong>Sin turnos hoy</strong>Cargá uno desde «Nuevo turno».</td></tr>';
+  var pend = Proto.datos.turnos.filter(function (t) { return t.estado === "pendiente"; });
+  document.getElementById("atencion").innerHTML = pend.length
+    ? pend.map(function (t) { return '<div class="dato"><span>' + Proto.fecha(t.fecha) + " " + t.hora + '</span><span><a href="turno.html?id=' + t.id + '">' + Proto.esc(t.paciente) + "</a> · sin confirmar</span></div>"; }).join("")
+    : '<p class="sub">Nada pendiente.</p>';
+</script>
+</body>
+</html>

@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Nuevo turno — Turnos (prototipo)</title>
+<link rel="stylesheet" href="../tokens.css">
+<link rel="stylesheet" href="../app.css">
+</head>
+<body>
+<div class="shell">
+  <nav class="nav" aria-label="Principal">
+    <div class="marca">Turnos</div>
+    <a href="inicio.html">Inicio</a>
+    <a href="turnos.html">Turnos</a>
+    <a href="nuevo-turno.html" aria-current="page">Nuevo turno</a>
+    <a href="ajustes.html">Ajustes</a>
+    <div class="pie">Prototipo · <a href="../index.html">Mapa de pantallas</a></div>
+  </nav>
+  <main>
+    <div class="cabecera"><div><h1>Nuevo turno</h1><p class="sub">Los campos con * son obligatorios.</p></div></div>
+    <form class="hoja" id="form" novalidate style="max-width:640px">
+      <div class="campo"><label for="paciente">Paciente *</label><input id="paciente" autocomplete="off"><div class="msg-error" hidden>Escribí el nombre del paciente.</div></div>
+      <div class="campo"><label for="profesional">Profesional *</label><select id="profesional"></select></div>
+      <div class="campo"><label for="fecha">Fecha *</label><input id="fecha" type="date" value="2026-11-06"><div class="msg-error" hidden>Elegí una fecha.</div></div>
+      <div class="campo"><label for="hora">Hora *</label><input id="hora" type="time" value="10:00" step="900"><div class="ayuda">Turnos cada 15 minutos.</div></div>
+      <div class="campo"><label for="motivo">Motivo</label><textarea id="motivo" rows="3"></textarea></div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <button class="btn primario" type="submit">Guardar turno</button>
+        <a class="btn" href="turnos.html">Cancelar</a>
+      </div>
+    </form>
+  </main>
+</div>
+<script src="../datos.js"></script>
+<script src="../app.js"></script>
+<script>
+  var sel = document.getElementById("profesional");
+  sel.innerHTML = Proto.datos.profesionales.map(function (p) { return "<option>" + Proto.esc(p) + "</option>"; }).join("");
+  document.getElementById("form").addEventListener("submit", function (e) {
+    e.preventDefault();
+    var ok = true;
+    ["paciente", "fecha"].forEach(function (id) {
+      var el = document.getElementById(id), campo = el.closest(".campo"), vacio = !el.value.trim();
+      campo.classList.toggle("error", vacio); campo.querySelector(".msg-error").hidden = !vacio;
+      if (vacio && ok) { el.focus(); ok = false; }
+    });
+    if (!ok) return;
+    var id = "t" + Date.now();
+    Proto.datos.turnos.push({ id: id, paciente: document.getElementById("paciente").value.trim(), profesional: sel.value,
+      fecha: document.getElementById("fecha").value, hora: document.getElementById("hora").value,
+      motivo: document.getElementById("motivo").value.trim(), estado: "pendiente" });
+    Proto.guardar();
+    sessionStorage.setItem("prototipo-aviso", "Turno guardado como pendiente.");
+    location.href = "turno.html?id=" + id;
+  });
+</script>
+</body>
+</html>

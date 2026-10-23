@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ajustes — Turnos (prototipo)</title>
+<link rel="stylesheet" href="../tokens.css">
+<link rel="stylesheet" href="../app.css">
+</head>
+<body>
+<div class="shell">
+  <nav class="nav" aria-label="Principal">
+    <div class="marca">Turnos</div>
+    <a href="inicio.html">Inicio</a>
+    <a href="turnos.html">Turnos</a>
+    <a href="nuevo-turno.html">Nuevo turno</a>
+    <a href="ajustes.html" aria-current="page">Ajustes</a>
+    <div class="pie">Prototipo · <a href="../index.html">Mapa de pantallas</a></div>
+  </nav>
+  <main>
+    <div class="cabecera"><div><h1>Ajustes</h1><p class="sub">Profesionales y recordatorios.</p></div></div>
+    <div class="grilla">
+      <section class="hoja"><h2>Profesionales</h2><div id="profes"></div>
+        <p><button class="btn" data-aviso="En la app real se abre un formulario para sumar un profesional con su agenda.">Agregar profesional</button></p></section>
+      <section class="hoja"><h2>Recordatorios</h2>
+        <p class="sub">Integración de mensajería: simulada en el prototipo.</p>
+        <p><button class="btn" data-aviso="En la app real se conecta el servicio de mensajería elegido en la spec (sección 7).">Conectar mensajería</button></p>
+        <p><button class="btn" data-reiniciar>Reiniciar datos de la demo</button></p></section>
+    </div>
+  </main>
+</div>
+<script src="../datos.js"></script>
+<script src="../app.js"></script>
+<script>
+  document.getElementById("profes").innerHTML = Proto.datos.profesionales.map(function (p) {
+    var n = Proto.datos.turnos.filter(function (t) { return t.profesional === p && t.estado !== "cancelado"; }).length;
+    return '<div class="dato"><span>' + n + " turnos</span><span>" + Proto.esc(p) + "</span></div>";
+  }).join("");
+</script>
+</body>
+</html>

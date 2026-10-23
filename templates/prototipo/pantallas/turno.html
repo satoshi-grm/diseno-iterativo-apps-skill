@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Detalle de turno — Turnos (prototipo)</title>
+<link rel="stylesheet" href="../tokens.css">
+<link rel="stylesheet" href="../app.css">
+</head>
+<body>
+<div class="shell">
+  <nav class="nav" aria-label="Principal">
+    <div class="marca">Turnos</div>
+    <a href="inicio.html">Inicio</a>
+    <a href="turnos.html" aria-current="page">Turnos</a>
+    <a href="nuevo-turno.html">Nuevo turno</a>
+    <a href="ajustes.html">Ajustes</a>
+    <div class="pie">Prototipo · <a href="../index.html">Mapa de pantallas</a></div>
+  </nav>
+  <main>
+    <p><a href="turnos.html">← Volver a Turnos</a></p>
+    <div class="cabecera">
+      <div><h1 id="nombre"></h1><p class="sub" id="cuando"></p></div>
+      <div id="acciones"></div>
+    </div>
+    <section class="hoja" id="ficha"></section>
+  </main>
+</div>
+<script src="../datos.js"></script>
+<script src="../app.js"></script>
+<script>
+  var t = Proto.turno(Proto.param("id") || "t1");
+  function pintar() {
+    if (!t) { document.getElementById("nombre").textContent = "Turno no encontrado"; document.getElementById("ficha").innerHTML = '<div class="vacio"><strong>Este turno no existe o fue borrado</strong><a href="turnos.html">Volver a la lista</a></div>'; return; }
+    document.title = t.paciente + " — Turnos (prototipo)";
+    document.getElementById("nombre").textContent = t.paciente;
+    document.getElementById("cuando").innerHTML = Proto.fecha(t.fecha) + " · " + t.hora + " · " + Proto.estado(t.estado);
+    document.getElementById("ficha").innerHTML =
+      '<div class="dato"><span>Profesional</span><span>' + Proto.esc(t.profesional) + "</span></div>" +
+      '<div class="dato"><span>Motivo</span><span>' + (Proto.esc(t.motivo) || '<span class="sub">Sin motivo cargado</span>') + "</span></div>" +
+      '<div class="dato"><span>Recordatorio</span><span>Se envía 24 h antes (simulado)</span></div>';
+    var a = "";
+    if (t.estado === "pendiente") a += '<button class="btn primario" id="confirmar">Confirmar</button> ';
+    if (t.estado !== "cancelado") a += '<button class="btn peligro" id="cancelar">Cancelar turno</button>';
+    else a += '<button class="btn" id="reactivar">Reactivar</button>';
+    document.getElementById("acciones").innerHTML = a;
+    var c = document.getElementById("confirmar"); if (c) c.onclick = function () { cambiar("confirmado", "Turno confirmado. En la app real se avisa al paciente."); };
+    var x = document.getElementById("cancelar"); if (x) x.onclick = function () {
+      var antes = t.estado; cambiar("cancelado", "");
+      Proto.avisar("Turno cancelado.");
+      var av = document.getElementById("aviso"); var d = document.createElement("button");
+      d.className = "btn"; d.style.marginLeft = "12px"; d.textContent = "Deshacer";
+      d.onclick = function () { cambiar(antes, "Cancelación deshecha."); }; av.appendChild(d);
+    };
+    var r = document.getElementById("reactivar"); if (r) r.onclick = function () { cambiar("pendiente", "Turno reactivado como pendiente."); };
+  }
+  function cambiar(estado, msg) { t.estado = estado; Proto.guardar(); pintar(); if (msg) Proto.avisar(msg); }
+  pintar();
+</script>
+</body>
+</html>
